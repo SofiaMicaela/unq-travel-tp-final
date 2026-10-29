@@ -12,7 +12,7 @@ public class TrasladoVIP implements MetodoTraslado {
 		this.porcentajeFijo = porcentajeFijo;
 	}
 	
-	public Float calcularCosto(float precio) {
+	public float calcularCosto(float precio) {
 		return precio * this.porcentajeFijo / 100 + this.cargoBase;
 	}
 

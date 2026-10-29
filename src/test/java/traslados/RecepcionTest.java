@@ -1,20 +1,18 @@
 package traslados;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
 
-import reserva.Direccion;
 import reserva.Reserva;
 
 class RecepcionTest {
 	
-	Direccion destino = new Direccion("calle", 123, "unLugar");
-	Reserva reserva = new Reserva(2, destino);
-	
 
 	@Test
 	void suCostoSiempreEsCero() {
+		Reserva reserva = mock(Reserva.class);
 		MetodoTraslado traslado = new Recepcion(1);
 		
 		assertEquals(0, traslado.costoTraslado(reserva));
