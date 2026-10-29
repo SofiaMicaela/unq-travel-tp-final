@@ -38,7 +38,4 @@ public class Reserva {
 		}
 		return this.metodoTraslado.costoTraslado(this);
 	}
-	
-	
-
 }

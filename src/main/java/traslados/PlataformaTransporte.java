@@ -1,7 +1,9 @@
 package traslados;
 
+import reserva.Direccion;
+
 public interface PlataformaTransporte {
 
-	float estimarTraslado(Object cantidadPasajeros, Object direccion);
+	float estimarTraslado(int cantidadPasajeros, Direccion direccion);
 
 }
