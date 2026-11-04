@@ -1,5 +1,8 @@
 package reserva;
 
+import java.util.ArrayList;
+
+import notificador.ObservadorReserva;
 import traslados.MetodoTraslado;
 import traslados.TrasladoNoDisponibleExcepion;
 
@@ -8,6 +11,7 @@ public class Reserva {
 	private int cantidadPasajeros;
 	private Direccion destino;
 	private MetodoTraslado metodoTraslado;
+	private ArrayList<ObservadorReserva> observadores = new ArrayList<>();
 
 	public Reserva(int cantPasajeros, Direccion destino) {
 		this.cantidadPasajeros = cantPasajeros;
@@ -38,4 +42,40 @@ public class Reserva {
 		}
 		return this.metodoTraslado.costoTraslado(this);
 	}
+	
+	
+	//--- State --------------------------------
+	
+	//ToDo: puede solaparse con el state de elias. Es importante que al cambiar de estado notifique
+	//      avisando su estado previo y actual.
+	/*
+	public void cambiarEstado(EstadoBase estado){
+		EstadoBase estadoAntiguo = this.estado
+		this.estado = estado
+		notificar(estadoAntiguo, estado)
+	} 
+	*/
+	//------------------------------------------
+	
+	//--- Notificador --------------------------
+	
+	//ToDo: corregir cuando se agregue STATE al proyecto
+	/*
+	public void notificar(EstadoBase antiguo, EstadoBase nuevo) {
+		for (ObservadorReserva observador: observadores) {
+			observador.update(antiguo, nuevo);
+		}
+		
+	}
+	*/
+	
+	public void suscribir(ObservadorReserva obs) {
+		this.observadores.add(obs);
+	}
+	
+	public void desuscribir(ObservadorReserva obs) {
+		this.observadores.remove(obs);
+	}
+	
+	//------------------------------------------
 }
