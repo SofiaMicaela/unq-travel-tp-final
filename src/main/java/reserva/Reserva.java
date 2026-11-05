@@ -1,22 +1,35 @@
 package reserva;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import traslados.MetodoTraslado;
 import traslados.TrasladoNoDisponibleExcepion;
+import catalogo.ItemCatalogo;///
+import reserva.estado.EstadoBase;///
+import reserva.estado.SolicitudPendiente;
 
 public class Reserva {
 
 	private int cantidadPasajeros;
 	private Direccion destino;
 	private MetodoTraslado metodoTraslado;
+	private EstadoBase estado;///
+    private List<ItemCatalogo> servicios;///
 
 	public Reserva(int cantPasajeros, Direccion destino) {
 		this.cantidadPasajeros = cantPasajeros;
 		this.destino = destino;
+		this.servicios = new ArrayList<>();///
+        this.estado = new SolicitudPendiente();///
 	}
 
-	// RETORNA 0 HASTA QUE IMPLEMENTEMOS LOS SERVICIOS TURISTICOS 
-	public float costoSinTraslado() {
-		return 0;   //PENDIENTE A IMPLEMENTAR
+	public float costoSinTraslado() {////
+        float total = 0;
+        for (ItemCatalogo item : this.servicios) {
+            total += item.getPrecioFinal();
+        }
+        return total;
 	}
 
 	public int getCantidadPasajeros() {
@@ -38,4 +51,41 @@ public class Reserva {
 		}
 		return this.metodoTraslado.costoTraslado(this);
 	}
+
+	public void setEstado(EstadoBase nuevoEstado) {/////
+        this.estado = nuevoEstado;
+    }
+	
+	public List<ItemCatalogo> getServiciosAux() {/////
+        return this.servicios;
+    }
+	public void agregarServicio(ItemCatalogo servicio) {////
+        this.estado.agregarServicio(this, servicio);
+    }
+    
+    public void quitarServicio(ItemCatalogo servicio) {////
+        this.estado.quitarServicio(this, servicio);
+    }
+    
+    public void confirmar() {////
+        this.estado.confirmar(this);
+    }
+
+    public void iniciarCheckIn() {////
+        this.estado.iniciarCheckIn(this);
+    }
+
+    public void iniciarEjecucion() {////
+        this.estado.iniciarEjecucion(this);
+    }
+
+    public void finalizar() {///
+        this.estado.finalizar(this);
+    }
+
+    public void cancelar() {////
+        this.estado.cancelar(this);
+    }
+    
+
 }
