@@ -55,4 +55,19 @@ public class ServicioIndividual implements ItemCatalogo{
             }
         }
 	}
+	public String getCodigo() {
+		return codigo;
+	}
+	public String getCategoria() {
+		return categoria;
+	}
+	public String getOperador() {
+		return operador;
+	}
+	public double getDescuentoPromocional() {
+		return descuentoPromocional;
+	}
+	public Map<DefinicionAtributo, Object> getAtributosDinamicos() {
+		return atributosDinamicos;
+	}
 }
