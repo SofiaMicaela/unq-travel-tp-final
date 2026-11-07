@@ -11,6 +11,7 @@ public class PaqueteTuristico implements ItemCatalogo{
 
     public PaqueteTuristico(String nombre, double descuentoPorcentaje) {
         this.nombre = nombre;
+        this.descripcion = descripcion;
         this.descuentoPorcentaje = descuentoPorcentaje;
     }
 
