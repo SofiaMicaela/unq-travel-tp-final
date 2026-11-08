@@ -1,10 +1,13 @@
 package reserva;
 
 import java.util.ArrayList;
-
 import notificador.ObservadorReserva;
+import java.util.List;
 import traslados.MetodoTraslado;
 import traslados.TrasladoNoDisponibleExcepion;
+import catalogo.ItemCatalogo;///
+import reserva.estado.EstadoBase;///
+import reserva.estado.SolicitudPendiente;
 
 public class Reserva {
 
@@ -12,15 +15,22 @@ public class Reserva {
 	private Direccion destino;
 	private MetodoTraslado metodoTraslado;
 	private ArrayList<ObservadorReserva> observadores = new ArrayList<>();
+	private EstadoBase estado;///
+    private List<ItemCatalogo> servicios;///
 
 	public Reserva(int cantPasajeros, Direccion destino) {
 		this.cantidadPasajeros = cantPasajeros;
 		this.destino = destino;
+		this.servicios = new ArrayList<>();///
+        this.estado = new SolicitudPendiente();///
 	}
 
-	// RETORNA 0 HASTA QUE IMPLEMENTEMOS LOS SERVICIOS TURISTICOS 
-	public float costoSinTraslado() {
-		return 0;   //PENDIENTE A IMPLEMENTAR
+	public float costoSinTraslado() {////
+        float total = 0;
+        for (ItemCatalogo item : this.servicios) {
+            total += item.getPrecioFinal();
+        }
+        return total;
 	}
 
 	public int getCantidadPasajeros() {
@@ -43,31 +53,13 @@ public class Reserva {
 		return this.metodoTraslado.costoTraslado(this);
 	}
 	
-	
-	//--- State --------------------------------
-	
-	//ToDo: puede solaparse con el state de elias. Es importante que al cambiar de estado notifique
-	//      avisando su estado previo y actual.
-	/*
-	public void cambiarEstado(EstadoBase estado){
-		EstadoBase estadoAntiguo = this.estado
-		this.estado = estado
-		notificar(estadoAntiguo, estado)
-	} 
-	*/
-	//------------------------------------------
-	
 	//--- Notificador --------------------------
 	
-	//ToDo: corregir cuando se agregue STATE al proyecto
-	/*
 	public void notificar(EstadoBase antiguo, EstadoBase nuevo) {
 		for (ObservadorReserva observador: observadores) {
-			observador.update(antiguo, nuevo);
+			observador.update(this, antiguo, nuevo);
 		}
-		
 	}
-	*/
 	
 	public void suscribir(ObservadorReserva obs) {
 		this.observadores.add(obs);
@@ -78,4 +70,42 @@ public class Reserva {
 	}
 	
 	//------------------------------------------
+
+	public void setEstado(EstadoBase nuevoEstado) {/////
+		EstadoBase estadoAntiguo = this.estado;
+		this.estado = nuevoEstado;
+		notificar(estadoAntiguo, estado);
+    }
+	
+	public List<ItemCatalogo> getServiciosAux() {/////
+        return this.servicios;
+    }
+	public void agregarServicio(ItemCatalogo servicio) {////
+        this.estado.agregarServicio(this, servicio);
+    }
+    
+    public void quitarServicio(ItemCatalogo servicio) {////
+        this.estado.quitarServicio(this, servicio);
+    }
+    
+    public void confirmar() {////
+        this.estado.confirmar(this);
+    }
+
+    public void iniciarCheckIn() {////
+        this.estado.iniciarCheckIn(this);
+    }
+
+    public void iniciarEjecucion() {////
+        this.estado.iniciarEjecucion(this);
+    }
+
+    public void finalizar() {///
+        this.estado.finalizar(this);
+    }
+
+    public void cancelar() {////
+        this.estado.cancelar(this);
+    }
+    
 }

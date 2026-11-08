@@ -20,7 +20,10 @@ public class Direccion {
 	public String getLocalidad() {
 		return localidad;
 	}
-
+	
+	public String asString() {
+		return calle + ("" + altura) + localidad;
+	}
 
 	public Direccion(String calle, int altura, String localidad) {
 		this.altura = altura;

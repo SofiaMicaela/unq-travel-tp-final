@@ -1,9 +1,8 @@
 package notificador;
 
+import reserva.Reserva;
+import reserva.estado.EstadoBase;
+
 public interface ObservadorReserva {
-	/* ToDo: sacar comentarios una vez se agregue EstadoBase
-	public void update(EstadoBase antiguo, EstadoBase nuevo) {
-		
-	}
-	*/
+	public void update(Reserva reserva, EstadoBase antiguo, EstadoBase nuevo);
 }
