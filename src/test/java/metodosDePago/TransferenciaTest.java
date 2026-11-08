@@ -8,26 +8,31 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import reserva.Reserva;
+
 class TransferenciaTest {
 	
 	private ApiTransferencia api;
 	private Transferencia transferencia;
 	private LocalDate fecha; 
+	private Reserva reserva;
 	
 	@BeforeEach
 	void setUp() {
 		api = mock(ApiTransferencia.class);
 		fecha = LocalDate.now();
+		reserva = mock(Reserva.class);
 		
-		transferencia = new Transferencia( api, 2000,  "12345", "viaje", fecha);
+		transferencia = new Transferencia( api,"12345", "viaje", fecha);
 	}
 	@Test
 	void procesaLaTransferenciaYGeneraElComprobante() {
+		when(reserva.costoTotal()).thenReturn(2000f);
 		when(api.validarCuenta("12345", "viaje")).thenReturn(true);
 		
 		when(api.transferir("12345", "viaje", 2000, fecha)).thenReturn("t123");
 		
-		transferencia.procesarPago();
+		transferencia.procesarPago(reserva);
 		
 		verify(api).validarCuenta("12345", "viaje");
 		
@@ -45,7 +50,7 @@ class TransferenciaTest {
 	void rechazaElPagoSiLaCuentaNoEsValida() {
 		when(api.validarCuenta("12345", "viaje")).thenReturn(false);
 		
-		assertThrows(PagoRechazadoEcxeption.class,() -> transferencia.procesarPago());
+		assertThrows(PagoRechazadoEcxeption.class,() -> transferencia.procesarPago(reserva));
 		
 		verify(api, never()).transferir(anyString(), anyString(), anyFloat(), any(LocalDate.class));
 		
@@ -54,14 +59,15 @@ class TransferenciaTest {
 	}
 	@Test 
 	void procesarUnaTransferenciaProgramada() {
+		when(reserva.costoTotal()).thenReturn(2000f);
 		LocalDate fechaProgramada = fecha.plusDays(7);
 		
-		transferencia = new Transferencia ( api, 2000, "12345", "viaje", fechaProgramada);
+		transferencia = new Transferencia ( api, "12345", "viaje", fechaProgramada);
 		
 		when(api.validarCuenta("12345","viaje")).thenReturn(true);
 		when(api.transferir("12345","viaje",2000, fechaProgramada)).thenReturn("t123");
 		
-		transferencia.procesarPago();
+		transferencia.procesarPago(reserva);
 		
 		verify(api).transferir("12345","viaje", 2000, fechaProgramada );
 		

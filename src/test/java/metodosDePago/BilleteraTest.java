@@ -6,15 +6,20 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import reserva.Reserva;
+
 class BilleteraTest {
 
 	private ApiBilletera api;
 	private  Billetera billetera;
+	private Reserva reserva;
 	
 	@BeforeEach
 	void setUp() {
 		api = mock(ApiBilletera.class);
-		billetera = new Billetera(api, 1500, "cuenta123");
+		billetera = new Billetera(api, "cuenta123");
+		reserva = mock(Reserva.class);
+		when(reserva.costoTotal()).thenReturn(1500f);
 	}
 	
 	@Test
@@ -25,7 +30,7 @@ class BilleteraTest {
 		
 		when(api.acreditarPago("cuenta123", 1500)).thenReturn("b123");
 		
-		billetera.procesarPago();
+		billetera.procesarPago(reserva);
 		
 		verify(api).tieneSaldoSuficiente("cuenta123", 1500);
 		verify(api).bloquearSaldo("cuenta123", 1500);
@@ -36,9 +41,9 @@ class BilleteraTest {
 		}
 	@Test 
 	void rechazaElPagoSiNoHaySaldoSuficiente() {
-		when(api.tieneSaldoSuficiente("cuente123", 1500)).thenReturn(false);
+		when(api.tieneSaldoSuficiente("cuenta123", 1500)).thenReturn(false);
 		
-		assertThrows(PagoRechazadoEcxeption.class, () -> billetera.procesarPago());
+		assertThrows(PagoRechazadoEcxeption.class, () -> billetera.procesarPago(reserva));
 		
 		verify(api, never()).bloquearSaldo(anyString(), anyFloat());
 		
@@ -55,7 +60,7 @@ class BilleteraTest {
 		
 		when(api.bloquearSaldo("cuenta123", 1500)).thenReturn(false);
 		
-		assertThrows(PagoRechazadoEcxeption.class, () -> billetera.procesarPago());
+		assertThrows(PagoRechazadoEcxeption.class, () -> billetera.procesarPago(reserva));
 		
 		verify(api, never()).acreditarPago(anyString(), anyFloat());
 		verify(api, never()).enviarNotificacionPush(anyString(), anyString());

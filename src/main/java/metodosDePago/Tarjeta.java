@@ -2,6 +2,8 @@ package metodosDePago;
 
 import java.time.LocalDate;
 
+import reserva.Reserva;
+
 public class Tarjeta extends ProcesadorPago {
 	
 	private ApiTarjeta api;
@@ -10,8 +12,7 @@ public class Tarjeta extends ProcesadorPago {
 	private LocalDate vencimiento;
 	private Voucher voucher;
 
-	public Tarjeta(ApiTarjeta api, float monto, String numeroTarjeta, String cvv, LocalDate vencimiento) {
-		super(monto);
+	public Tarjeta(ApiTarjeta api, String numeroTarjeta, String cvv, LocalDate vencimiento) {
 		this.api = api;
 		this.numeroTarjeta =numeroTarjeta;
 		this.cvv = cvv;
@@ -23,7 +24,7 @@ public class Tarjeta extends ProcesadorPago {
 	}
 	
 	@Override 
-	protected void validarDatos() {
+	protected void validarDatos(Reserva reserva) {
 		boolean valido = this.api.validarTarjeta(this.numeroTarjeta, this.cvv, this.vencimiento);
 		
 		if(!valido) {
@@ -31,21 +32,21 @@ public class Tarjeta extends ProcesadorPago {
 		}
 	}
 	@Override 
-	protected void reservarFondos() {
-		boolean valido = this.api.preautorizarFondos(this.numeroTarjeta, this.getMonto());
+	protected void reservarFondos(Reserva reserva) {
+		boolean valido = this.api.preautorizarFondos(this.numeroTarjeta, reserva.costoTotal());
 		
 		if(!valido) {
 			throw new PagoRechazadoEcxeption("El banco rechazó la preautorización.");
 		}
 	}
 	@Override
-	protected String ejecutarTransaccion() {
-		return this.api.ejecutarTransaccion(this.numeroTarjeta, this.getMonto());
+	protected String ejecutarTransaccion(Reserva reserva) {
+		return this.api.ejecutarTransaccion(this.numeroTarjeta, reserva.costoTotal());
 	}
 	@Override 
-	protected void notificarResultado(String codigo) {
-		super.notificarResultado(codigo);
-		this.voucher = new Voucher(codigo, this.getMonto());
+	protected void notificarResultado(String codigo, Reserva reserva) {
+		super.notificarResultado(codigo, reserva);
+		this.voucher = new Voucher(codigo, reserva.costoTotal());
 	}
 
 }

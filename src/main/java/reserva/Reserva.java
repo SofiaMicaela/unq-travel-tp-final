@@ -6,6 +6,7 @@ import java.util.List;
 import traslados.MetodoTraslado;
 import traslados.TrasladoNoDisponibleExcepion;
 import catalogo.ItemCatalogo;///
+import metodosDePago.ProcesadorPago;
 import reserva.estado.EstadoBase;///
 import reserva.estado.SolicitudPendiente;
 
@@ -14,6 +15,7 @@ public class Reserva {
 	private int cantidadPasajeros;
 	private Direccion destino;
 	private MetodoTraslado metodoTraslado;
+	private ProcesadorPago procesadorPago;
 	private EstadoBase estado;///
     private List<ItemCatalogo> servicios;///
 
@@ -51,7 +53,9 @@ public class Reserva {
 		}
 		return this.metodoTraslado.costoTraslado(this);
 	}
-
+	public float costoTotal() {
+		return this.costoSinTraslado() + this.costoTraslado();
+	}
 
 	public MetodoTraslado getTraslado() {
 		return this.metodoTraslado;
@@ -91,6 +95,13 @@ public class Reserva {
     public void cancelar() {////
         this.estado.cancelar(this);
     }
+
+	public void elegirMetodoPago(ProcesadorPago procesador) {
+		this.procesadorPago = procesador;
+	}
+	public void procesarPago() {
+		this.estado.procesarPago(this, this.procesadorPago);
+	}
     
 
 }

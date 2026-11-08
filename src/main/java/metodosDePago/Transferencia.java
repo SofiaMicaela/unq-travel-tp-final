@@ -2,6 +2,8 @@ package metodosDePago;
 
 import java.time.LocalDate;
 
+import reserva.Reserva;
+
 public class Transferencia extends ProcesadorPago {
 	
 	private ApiTransferencia api;
@@ -10,8 +12,7 @@ public class Transferencia extends ProcesadorPago {
 	private LocalDate fechaEjecucion;
 	private ComprobanteTransferencia comprobante;
 
-	public Transferencia(ApiTransferencia api, float monto, String cbucvu, String alias, LocalDate fechaEjecucion) {
-		super(monto);
+	public Transferencia(ApiTransferencia api, String cbucvu, String alias, LocalDate fechaEjecucion) {
 		this.alias = alias;
 		this.api  =api;
 		this.cbuCvu =cbucvu;
@@ -19,7 +20,7 @@ public class Transferencia extends ProcesadorPago {
 	}
 
 	@Override
-	protected void validarDatos() {
+	protected void validarDatos(Reserva reserva) {
 		boolean valida =
 		this.api.validarCuenta(this.cbuCvu, this.alias);
 		
@@ -28,22 +29,22 @@ public class Transferencia extends ProcesadorPago {
 		}
 	}
 	@Override 
-	protected void reservarFondos() {
+	protected void reservarFondos(Reserva reserva) {
 		//No aplica para transferencia
 	}
 	@Override 
-	protected void notificarResultado( String codigo) {
-		super.notificarResultado(codigo);
+	protected void notificarResultado( String codigo, Reserva reserva) {
+		super.notificarResultado(codigo, reserva);
 		
-		this.comprobante = new ComprobanteTransferencia ( codigo, this.cbuCvu, this.getMonto(), this.fechaEjecucion);
+		this.comprobante = new ComprobanteTransferencia ( codigo, this.cbuCvu, reserva.costoTotal(), this.fechaEjecucion);
 	}
 	public ComprobanteTransferencia getComprobante() {
 			return this.comprobante;
 	}
 
 	@Override
-	protected String ejecutarTransaccion() {
-		return this.api.transferir(this.cbuCvu, this.alias, this.getMonto(), this.fechaEjecucion);
+	protected String ejecutarTransaccion(Reserva reserva) {
+		return this.api.transferir(this.cbuCvu, this.alias, reserva.costoTotal(), this.fechaEjecucion);
 	}
 
 }

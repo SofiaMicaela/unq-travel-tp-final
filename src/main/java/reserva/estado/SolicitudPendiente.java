@@ -1,6 +1,7 @@
 package reserva.estado;
 
 import catalogo.ItemCatalogo;
+import metodosDePago.ProcesadorPago;
 import reserva.Reserva;
 
 public class SolicitudPendiente extends EstadoBase {
@@ -16,11 +17,20 @@ public class SolicitudPendiente extends EstadoBase {
 
     @Override
     public void confirmar(Reserva reserva) {
-        reserva.setEstado(new Confirmada());
+    	reserva.procesarPago();
     }
 
     @Override
     public void cancelar(Reserva reserva) {
         reserva.setEstado(new Cancelada());
+    }
+    @Override 
+    public void procesarPago(Reserva reserva, ProcesadorPago procesador) {
+    	if (procesador == null) {
+			throw new IllegalStateException( "Todavia no se eligio un metodo de pago");
+		}
+    	procesador.procesarPago(reserva);
+    	reserva.setEstado(new Confirmada());
+	
     }
 }

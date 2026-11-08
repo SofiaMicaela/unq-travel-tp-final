@@ -1,28 +1,22 @@
 package metodosDePago;
 
+import reserva.Reserva;
+
 public abstract class ProcesadorPago {
 	
-	private float monto;
 	private String codigoTransaccion;
-	
-	public ProcesadorPago(float monto) {
-		this.monto = monto;
-	}
 
-	public final void procesarPago() {
-		this.validarDatos();
-		this.reservarFondos();
-		String codigo = this.ejecutarTransaccion();
-		this.notificarResultado(codigo);
+	public final void procesarPago(Reserva reserva) {
+		this.validarDatos(reserva);
+		this.reservarFondos(reserva);
+		String codigo = this.ejecutarTransaccion(reserva);
+		this.notificarResultado(codigo,reserva);
 	}
 	
-	protected float getMonto() {
-		return this.monto;
-	}
-	protected abstract void validarDatos();
-	protected abstract void reservarFondos();
-	protected abstract String ejecutarTransaccion();
-	protected void notificarResultado(String codigo) {
+	protected abstract void validarDatos(Reserva reserva);
+	protected abstract void reservarFondos(Reserva reserva);
+	protected abstract String ejecutarTransaccion(Reserva reserva);
+	protected void notificarResultado(String codigo,Reserva reserva) {
 		this.codigoTransaccion = codigo;
 	}
 	public String getCodigoTransaccion() {
