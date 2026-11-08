@@ -54,6 +54,20 @@ class ReservaTest {
 		
 		assertThrows(IllegalStateException.class, () -> reserva.costoTraslado());
 	}
+	@Test
+	void conservaElTrasladoCuandoSeIntentaCambiarPorUnoNoDisponible() throws TrasladoNoDisponibleExcepion {
+		MetodoTraslado traslado1 = mock(MetodoTraslado.class);
+		MetodoTraslado traslado2 = mock(MetodoTraslado.class);
+		
+		when(traslado1.estaDisponible()).thenReturn(true);
+		when(traslado2.estaDisponible()).thenReturn(false);
+		
+		reserva.elegirTraslado(traslado1);
+		
+		assertThrows(TrasladoNoDisponibleExcepion.class, () -> reserva.elegirTraslado(traslado2));
+		assertEquals(traslado1, reserva.getTraslado());
+		
+	}
 		
 	
 }
