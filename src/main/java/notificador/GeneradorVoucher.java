@@ -3,25 +3,24 @@ package notificador;
 import reserva.Reserva;
 import reserva.estado.EstadoBase;
 
-/* ToDo: mal planteado. no utiliza mailSender
+import java.util.ArrayList;
 
+import metodosDePago.Voucher;
 
 public class GeneradorVoucher implements ObservadorReserva{
-	private MailSender mailSender;
-	
-	public GeneradorVoucher(MailSender mailSender) {
-		this.mailSender = mailSender;
-	}
+	private ArrayList<Voucher> vouchers = new ArrayList<>();
+
 	
 	@Override
 	public void update(Reserva reserva, EstadoBase antiguo, EstadoBase nuevo) {
 		if (!nuevo.estaFinalizada()) {
 			return;
-		enviarMail(reserva.getDireccion().asString(),
-				   "Comprobante creado",
-				   "Tu comprobante fiscal con su respectivo voucher ya se encuentran disponibles.",
-				   null);
 		}
+		float costoReserva = reserva.costoSinTraslado() + reserva.costoTraslado();
+		this.vouchers.add(new Voucher("Factura N°" + ("" + vouchers.size()), costoReserva));
+	}
+	
+	public ArrayList<Voucher> getVouchers() {
+		return this.vouchers;
 	}
 }
-*/

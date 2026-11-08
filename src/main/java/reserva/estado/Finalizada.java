@@ -11,4 +11,8 @@ public class Finalizada extends EstadoBase{
     	return "Finalizado";
     }
 	
+	@Override
+	public boolean estaFinalizada() {
+		return true;
+	}
 }

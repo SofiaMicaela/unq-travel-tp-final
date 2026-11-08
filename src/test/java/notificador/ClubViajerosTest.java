@@ -1,7 +1,7 @@
 package notificador;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,14 +30,13 @@ public class ClubViajerosTest {
 									 "Con la cancelación de tu reserva obtuviste un cupón del 5.0% de descuento para tu próxima reserva!", // ToDo: No es dinámico con respecto a la implementación, quizá haya que cambiarlo
 				   				     null);
 	}
-	/*
+	
 	@Test
-	public void noSeEnviaMailEnEstadoNoNotificable() {
+	public void noSeEnviaMailEnEstadoNoCancelado() {
 		reserva.confirmar();
-		reserva.iniciarCheckIn();
-		verify(mailSender, times(1)).enviarMail(reserva.getDireccion().asString(), 
+		verify(mailSender, never()).enviarMail(reserva.getDireccion().asString(), 
 				 "Cambio de estado de la reserva",
 					 "Tu reserva pasó de estar Solicitud pendiente a Confirmado.",
 				     null);
-	}*/
+	}
 }

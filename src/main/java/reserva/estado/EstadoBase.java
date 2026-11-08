@@ -40,6 +40,10 @@ public class EstadoBase {
     	return false;
     }
     
+    public boolean estaFinalizada() {
+    	return false;
+    }
+    
     public String nombre() {
     	throw new OperacionInvalidaEstadoExcepcion("El estado actual no tiene un nombre definido aún");
     }
