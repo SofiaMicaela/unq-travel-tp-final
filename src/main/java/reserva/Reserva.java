@@ -6,6 +6,7 @@ import java.util.List;
 import traslados.MetodoTraslado;
 import traslados.TrasladoNoDisponibleExcepion;
 import catalogo.ItemCatalogo;///
+import metodosDePago.ProcesadorPago;
 import reserva.estado.EstadoBase;///
 import reserva.estado.SolicitudPendiente;
 
@@ -15,6 +16,7 @@ public class Reserva {
 	private Direccion destino;
 	private MetodoTraslado metodoTraslado;
 	private ArrayList<ObservadorReserva> observadores = new ArrayList<>();
+	private ProcesadorPago procesadorPago;
 	private EstadoBase estado;///
     private List<ItemCatalogo> servicios;///
 
@@ -70,6 +72,14 @@ public class Reserva {
 	}
 	
 	//------------------------------------------
+	public float costoTotal() {
+		return this.costoSinTraslado() + this.costoTraslado();
+	}
+
+	public MetodoTraslado getTraslado() {
+		return this.metodoTraslado;
+	}
+
 
 	public void setEstado(EstadoBase nuevoEstado) {/////
 		EstadoBase estadoAntiguo = this.estado;
@@ -107,5 +117,12 @@ public class Reserva {
     public void cancelar() {////
         this.estado.cancelar(this);
     }
+
+	public void elegirMetodoPago(ProcesadorPago procesador) {
+		this.procesadorPago = procesador;
+	}
+	public void procesarPago() {
+		this.estado.procesarPago(this, this.procesadorPago);
+	}
     
 }

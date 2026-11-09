@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import metodosDePago.ProcesadorPago;
 import reserva.Direccion;
 import reserva.Reserva;
 
@@ -18,6 +19,8 @@ public class NotificadorEmailTest {
 	public void setUp() {
 		mailSender = mock(MailSender.class);
 		reserva = new Reserva(10, mock(Direccion.class));
+		ProcesadorPago procesador = mock(ProcesadorPago.class);
+	    reserva.elegirMetodoPago(procesador);
 		reserva.suscribir(new NotificadorEmail(mailSender));
 	}
 	

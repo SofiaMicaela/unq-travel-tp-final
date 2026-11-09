@@ -1,6 +1,6 @@
 package traslados;
 
-public class TrasladoNoDisponibleExcepion extends Exception {
+public class TrasladoNoDisponibleExcepion extends RuntimeException {
 
 	/**
 	 * 
