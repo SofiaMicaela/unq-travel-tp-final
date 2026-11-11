@@ -1,5 +1,7 @@
 package catalogo;
 import catalogo.atributos.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,15 +14,16 @@ public class ServicioIndividual implements ItemCatalogo{
     private double precioBase;
     private double descuentoPromocional;
     private Map<DefinicionAtributo, Object> atributosDinamicos = new HashMap<>();
+    private ArrayList<Categoria> categorias;
     
     public ServicioIndividual(String codigo, String nombre, String descripcion, 
-            								String operador, String categoria, 
+            								String operador, ArrayList<Categoria> categorias, 
             						double precioBase, double descuentoPromocional) {
     		this.codigo = codigo;
     		this.nombre = nombre;
     		this.descripcion = descripcion;
     		this.operador = operador;
-    		this.categoria = categoria;
+    		this.categorias = categorias;
     		this.precioBase = precioBase;
     		this.descuentoPromocional = descuentoPromocional;
 }
@@ -40,6 +43,10 @@ public class ServicioIndividual implements ItemCatalogo{
 	public double getPrecioFinal() {
         return precioBase * (1 - (descuentoPromocional / 100));
     }
+	@Override
+	public ArrayList<Categoria> getCategorias(){
+		return this.categorias;
+	}
 	
 	public void validar() {
         for (Map.Entry<DefinicionAtributo, Object> entry : atributosDinamicos.entrySet()) {
