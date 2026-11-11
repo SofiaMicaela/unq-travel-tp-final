@@ -9,21 +9,20 @@ public class ServicioIndividual implements ItemCatalogo{
 	private String codigo;
     private String nombre;
     private String descripcion;
-    private String categoria;
+    private Categoria categoria;
     private String operador;
     private double precioBase;
     private double descuentoPromocional;
     private Map<DefinicionAtributo, Object> atributosDinamicos = new HashMap<>();
-    private ArrayList<Categoria> categorias;
     
     public ServicioIndividual(String codigo, String nombre, String descripcion, 
-            								String operador, ArrayList<Categoria> categorias, 
+            								String operador, Categoria categoria, 
             						double precioBase, double descuentoPromocional) {
     		this.codigo = codigo;
     		this.nombre = nombre;
     		this.descripcion = descripcion;
     		this.operador = operador;
-    		this.categorias = categorias;
+    		this.categoria = categoria;
     		this.precioBase = precioBase;
     		this.descuentoPromocional = descuentoPromocional;
 }
@@ -44,9 +43,10 @@ public class ServicioIndividual implements ItemCatalogo{
         return precioBase * (1 - (descuentoPromocional / 100));
     }
 	@Override
-	public ArrayList<Categoria> getCategorias(){
-		return this.categorias;
+	public boolean esCategoria(Categoria categoria) {
+		return this.categoria == categoria;
 	}
+
 	
 	public void validar() {
         for (Map.Entry<DefinicionAtributo, Object> entry : atributosDinamicos.entrySet()) {
@@ -65,7 +65,7 @@ public class ServicioIndividual implements ItemCatalogo{
 	public String getCodigo() {
 		return codigo;
 	}
-	public String getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 	public String getOperador() {

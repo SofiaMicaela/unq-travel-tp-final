@@ -43,12 +43,13 @@ public class PaqueteTuristico implements ItemCatalogo{
     }
     
     @Override
-    public ArrayList<Categoria> getCategorias(){
-    	ArrayList<Categoria> categorias = new ArrayList<Categoria>();
+    public boolean esCategoria(Categoria categoria){
     	for (ItemCatalogo item : this.items) {
-    		categorias.addAll(item.getCategorias());
+    		if (item.esCategoria(categoria)) {
+    			return true;
+    		}
     	}
-    	return categorias;
+    	return false;
     }
 
 	public double getDescuentoPorcentaje() {

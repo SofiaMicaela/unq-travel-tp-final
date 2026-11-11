@@ -7,5 +7,5 @@ public interface ItemCatalogo {
     String getDescripcion();
     double getPrecioBase();
     double getPrecioFinal();
-    ArrayList<Categoria> getCategorias();
+	boolean esCategoria(Categoria categoria);
 }
