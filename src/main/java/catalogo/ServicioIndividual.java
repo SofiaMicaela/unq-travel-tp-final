@@ -1,5 +1,4 @@
 package catalogo;
-import catalogo.atributos.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +12,7 @@ public class ServicioIndividual implements ItemCatalogo{
     private String operador;
     private double precioBase;
     private double descuentoPromocional;
-    private Map<DefinicionAtributo, Object> atributosDinamicos = new HashMap<>();
+    private Map<String, Atributo> atributos = new HashMap<>();
     
     public ServicioIndividual(String codigo, String nombre, String descripcion, 
             								String operador, Categoria categoria, 
@@ -48,20 +47,26 @@ public class ServicioIndividual implements ItemCatalogo{
 	}
 
 	
-	public void validar() {
-        for (Map.Entry<DefinicionAtributo, Object> entry : atributosDinamicos.entrySet()) {
-            DefinicionAtributo def = entry.getKey();
-            Object valor = entry.getValue();
-
-            if (def.esObligatorio() && valor == null) {
-                throw new IllegalStateException("Falta valor para el atributo obligatorio: " + def.getNombre());
-            }
-
-            if (valor != null && !def.validarTipo(valor)) {
-                throw new IllegalArgumentException("Tipo de dato inválido para el atributo: " + def.getNombre());
+	public void registrarAtributo(String nombre, boolean obligatorio) {
+        this.atributos.put(nombre, new Atributo(nombre, obligatorio));
+    }
+	
+	public void configurarAtributo(String nombre, Object valor) {
+        if (this.atributos.containsKey(nombre)) {
+            this.atributos.get(nombre).setValor(valor);
+        } else {
+            throw new IllegalArgumentException("El atributo " + nombre + " no existe en este servicio.");
+        }
+    }
+	
+	public boolean estaListoParaReservar() {
+        for (Atributo atributo : atributos.values()) {
+            if (atributo.esObligatorio() && !atributo.tieneValor()) {
+                return false; 
             }
         }
-	}
+        return true;
+    }
 	public String getCodigo() {
 		return codigo;
 	}
@@ -74,7 +79,7 @@ public class ServicioIndividual implements ItemCatalogo{
 	public double getDescuentoPromocional() {
 		return descuentoPromocional;
 	}
-	public Map<DefinicionAtributo, Object> getAtributosDinamicos() {
-		return atributosDinamicos;
+	public Map<String, Atributo> getAtributosDinamicos() {
+		return atributos;
 	}
 }
