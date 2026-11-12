@@ -6,31 +6,31 @@ import reserva.Reserva;
 
 public class EstadoBase {
 	public void agregarServicio(Reserva reserva, ItemCatalogo servicio) {
-        throw new OperacionInvalidaEstadoExcepcion("No se pueden agregar servicios en este estado.");
+        throw new OperacionInvalidaEstadoExcepcion("No se pueden agregar servicios estando en estado: "+ this.nombre());
     }
     
     public void quitarServicio(Reserva reserva, ItemCatalogo servicio) {
-        throw new OperacionInvalidaEstadoExcepcion("No se pueden quitar servicios en este estado.");
+        throw new OperacionInvalidaEstadoExcepcion("No se pueden quitar servicios estando en estado: "+ this.nombre());
     }
     
     public void confirmar(Reserva reserva) {
-        throw new OperacionInvalidaEstadoExcepcion("No se puede confirmar la reserva desde este estado.");
+        throw new OperacionInvalidaEstadoExcepcion("No se puede confirmar la reserva estando en estado: " + this.nombre());
     }
     
     public void iniciarCheckIn(Reserva reserva) {
-        throw new OperacionInvalidaEstadoExcepcion("No se puede iniciar el check-in desde este estado.");
+        throw new OperacionInvalidaEstadoExcepcion("No se puede iniciar el check-in estando en estado: "+ this.nombre());
     }
     
     public void iniciarEjecucion(Reserva reserva) {
-        throw new OperacionInvalidaEstadoExcepcion("No se puede pasar a En Curso desde este estado.");
+        throw new OperacionInvalidaEstadoExcepcion("No se puede pasar a En Curso estando en estado: "+ this.nombre());
     }
     
     public void finalizar(Reserva reserva) {
-        throw new OperacionInvalidaEstadoExcepcion("No se puede finalizar la reserva desde este estado.");
+        throw new OperacionInvalidaEstadoExcepcion("No se puede finalizar la reserva estando en estado: "+ this.nombre());
     }
     
     public void cancelar(Reserva reserva) {
-        throw new OperacionInvalidaEstadoExcepcion("La reserva no puede ser cancelada desde este estado.");
+        throw new OperacionInvalidaEstadoExcepcion("La reserva no puede ser cancelada estando en estado: "+ this.nombre());
     }
     
     public boolean esNotificable() {
@@ -46,10 +46,11 @@ public class EstadoBase {
     }
     
     public String nombre() {
-    	throw new OperacionInvalidaEstadoExcepcion("El estado actual no tiene un nombre definido aún");
+  
+        return this.getClass().getSimpleName();
     }
     
     public void procesarPago(Reserva reserva, ProcesadorPago procesador) {
-    	throw new OperacionInvalidaEstadoExcepcion("No se puede procesar el pago en este estado.");
+    	throw new OperacionInvalidaEstadoExcepcion("No se puede procesar el pago estando en estado:  "+ this.nombre());
     }
 }

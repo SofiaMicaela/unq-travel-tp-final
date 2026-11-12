@@ -18,6 +18,7 @@ public class SolicitudPendiente extends EstadoBase {
     @Override
     public void confirmar(Reserva reserva) {
     	reserva.procesarPago();
+    	reserva.setEstado(new Confirmada());
     }
 
     @Override
@@ -25,9 +26,8 @@ public class SolicitudPendiente extends EstadoBase {
         reserva.setEstado(new Cancelada());
     }
     
-    @Override
     public String nombre() {
-    	return "Solicitud pendiente";
+        return "Solicitud pendiente";
     }
 
     @Override 
