@@ -1,17 +1,19 @@
 package busqueda;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import catalogo.Categoria;
+import catalogo.ItemCatalogo;
 import catalogo.ServicioIndividual;
 
-public class CriterioBusquedaAvanzado {
+public class BusquedaCatalogoTest {
 	private ServicioIndividual vueloBrasil;
 	private CriterioBusqueda criterioPorNombre;
 	private CriterioBusqueda criterioPorNombreFalse;
@@ -20,10 +22,13 @@ public class CriterioBusquedaAvanzado {
 	private ArrayList<CriterioBusqueda> listaCriteriosTrue;
 	private ArrayList<CriterioBusqueda> listaCriteriosMix;
 	private ArrayList<CriterioBusqueda> listaCriteriosFalse;
+	private Catalogo catalogo;
+	private ArrayList<ItemCatalogo> listaItems;
 	
 	@BeforeEach
 	public void setUp() {
 		vueloBrasil = new ServicioIndividual("A-0001", "Vuelo Buenos Aires - Brasil", "Ida y vuelta", "Aereolineas Argentinas", Categoria.ClaseEjecutiva, 1000000, 0);
+		listaItems = new ArrayList<ItemCatalogo>();
 		listaCriteriosTrue = new ArrayList<CriterioBusqueda>();
 		listaCriteriosMix = new ArrayList<CriterioBusqueda>();
 		listaCriteriosFalse = new ArrayList<CriterioBusqueda>();
@@ -41,28 +46,16 @@ public class CriterioBusquedaAvanzado {
 		
 		listaCriteriosFalse.add(criterioPorNombreFalse);
 		listaCriteriosFalse.add(criterioPorCategoriaFalse);
+		
+		listaItems.add(vueloBrasil);
+		
+		catalogo = new Catalogo(listaItems);
 	}
 	
 	
 	@Test
-	public void criterioAndFunciona() {
-		assertTrue(new CriterioAnd(listaCriteriosTrue).cumple(vueloBrasil));
-		assertFalse(new CriterioAnd(listaCriteriosMix).cumple(vueloBrasil));
-		assertFalse(new CriterioAnd(listaCriteriosFalse).cumple(vueloBrasil));
-	}
-	
-	@Test
-	public void criterioOrFunciona() {
-		assertTrue(new CriterioOr(listaCriteriosTrue).cumple(vueloBrasil));
-		assertTrue(new CriterioOr(listaCriteriosMix).cumple(vueloBrasil));
-		assertFalse(new CriterioOr(listaCriteriosFalse).cumple(vueloBrasil));
-	}
-	
-	@Test
-	public void criterioNotFunciona() {
-		assertFalse(new CriterioNot(criterioPorNombre).cumple(vueloBrasil));
-		assertTrue(new CriterioNot(criterioPorNombreFalse).cumple(vueloBrasil));
-		assertFalse(new CriterioNot(criterioPorCategoria).cumple(vueloBrasil));
-		assertTrue(new CriterioNot(criterioPorCategoriaFalse).cumple(vueloBrasil));
+	public void sePuedenMezclarCriteriosDeBusqueda() {
+		assertEquals(listaItems, catalogo.buscar(criterioPorNombre));
+		assertEquals(Collections.emptyList(), catalogo.buscar(criterioPorNombreFalse));
 	}
 }
