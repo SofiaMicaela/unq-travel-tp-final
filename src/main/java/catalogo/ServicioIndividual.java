@@ -1,5 +1,7 @@
 package catalogo;
 import catalogo.atributos.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,14 +9,14 @@ public class ServicioIndividual implements ItemCatalogo{
 	private String codigo;
     private String nombre;
     private String descripcion;
-    private String categoria;
+    private Categoria categoria;
     private String operador;
     private double precioBase;
     private double descuentoPromocional;
     private Map<DefinicionAtributo, Object> atributosDinamicos = new HashMap<>();
     
     public ServicioIndividual(String codigo, String nombre, String descripcion, 
-            								String operador, String categoria, 
+            								String operador, Categoria categoria, 
             						double precioBase, double descuentoPromocional) {
     		this.codigo = codigo;
     		this.nombre = nombre;
@@ -40,6 +42,11 @@ public class ServicioIndividual implements ItemCatalogo{
 	public double getPrecioFinal() {
         return precioBase * (1 - (descuentoPromocional / 100));
     }
+	@Override
+	public boolean esCategoria(Categoria categoria) {
+		return this.categoria == categoria;
+	}
+
 	
 	public void validar() {
         for (Map.Entry<DefinicionAtributo, Object> entry : atributosDinamicos.entrySet()) {
@@ -58,7 +65,7 @@ public class ServicioIndividual implements ItemCatalogo{
 	public String getCodigo() {
 		return codigo;
 	}
-	public String getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 	public String getOperador() {

@@ -41,6 +41,16 @@ public class PaqueteTuristico implements ItemCatalogo{
     public double getPrecioFinal() {
         return getPrecioBase() * (1 - (descuentoPorcentaje / 100));
     }
+    
+    @Override
+    public boolean esCategoria(Categoria categoria){
+    	for (ItemCatalogo item : this.items) {
+    		if (item.esCategoria(categoria)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 
 	public double getDescuentoPorcentaje() {
 		return descuentoPorcentaje;
