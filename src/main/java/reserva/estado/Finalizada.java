@@ -6,10 +6,7 @@ public class Finalizada extends EstadoBase{
     	return true;
     }
 	
-	@Override
-    public String nombre() {
-    	return "Finalizado";
-    }
+	
 	
 	@Override
 	public boolean estaFinalizada() {

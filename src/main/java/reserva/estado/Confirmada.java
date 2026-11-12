@@ -18,8 +18,5 @@ public class Confirmada extends EstadoBase{
     	return true;
     }
     
-    @Override
-    public String nombre() {
-    	return "Confirmado";
-    }
+
 }

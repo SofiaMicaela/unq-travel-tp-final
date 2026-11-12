@@ -29,7 +29,7 @@ public class NotificadorEmailTest {
 		reserva.confirmar();
 		verify(mailSender).enviarMail(reserva.getDireccion().asString(), 
 									 "Cambio de estado de la reserva",
-				   					 "Tu reserva pasó de estar Solicitud pendiente a Confirmado.",
+				   					 "Tu reserva pasó de estar Solicitud pendiente a Confirmada.",
 				   				     null);
 	}
 	
@@ -39,7 +39,7 @@ public class NotificadorEmailTest {
 		reserva.iniciarCheckIn();
 		verify(mailSender, times(1)).enviarMail(reserva.getDireccion().asString(), 
 				 "Cambio de estado de la reserva",
-					 "Tu reserva pasó de estar Solicitud pendiente a Confirmado.",
+					 "Tu reserva pasó de estar Solicitud pendiente a Confirmada.",
 				     null);
 	}
 }

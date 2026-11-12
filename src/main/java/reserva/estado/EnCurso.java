@@ -18,8 +18,5 @@ public class EnCurso extends EstadoBase {
     	return true;
     }
     
-    @Override
-    public String nombre() {
-    	return "En curso";
-    }
+
 }

@@ -13,8 +13,5 @@ public class EnCheckIn extends EstadoBase{
         reserva.setEstado(new Cancelada());
     }
     
-    @Override
-    public String nombre() {
-    	return "En checkin";
-    }
+
 }
