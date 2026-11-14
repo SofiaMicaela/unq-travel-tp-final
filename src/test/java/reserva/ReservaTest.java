@@ -26,7 +26,7 @@ class ReservaTest {
 		recepcion = new Recepcion(2);
 	}
 	@Test 
-	public void permiteElegirUnTrasladoDisponible() throws TrasladoNoDisponibleExcepion {
+	public void permiteElegirUnTrasladoDisponible() throws TrasladoNoDisponibleExcepcion {
 		reserva.elegirTraslado(recepcion);
 		
 		assertEquals(0, reserva.costoTraslado());
@@ -38,10 +38,10 @@ class ReservaTest {
 		
 		when(traslado.estaDisponible()).thenReturn(false);
 		
-		assertThrows(TrasladoNoDisponibleExcepion.class, () -> reserva.elegirTraslado(traslado));
+		assertThrows(TrasladoNoDisponibleExcepcion.class, () -> reserva.elegirTraslado(traslado));
 	}
 	@Test 
-	void devuelveElCostoInformadoPorElTraslado() throws TrasladoNoDisponibleExcepion{
+	void devuelveElCostoInformadoPorElTraslado() throws TrasladoNoDisponibleExcepcion{
 		
 		MetodoTraslado traslado = mock(MetodoTraslado.class);
 		
@@ -59,7 +59,7 @@ class ReservaTest {
 		assertThrows(IllegalStateException.class, () -> reserva.costoTraslado());
 	}
 	@Test
-	void conservaElTrasladoCuandoSeIntentaCambiarPorUnoNoDisponible() throws TrasladoNoDisponibleExcepion {
+	void conservaElTrasladoCuandoSeIntentaCambiarPorUnoNoDisponible() throws TrasladoNoDisponibleExcepcion {
 		MetodoTraslado traslado1 = mock(MetodoTraslado.class);
 		MetodoTraslado traslado2 = mock(MetodoTraslado.class);
 		
@@ -68,12 +68,12 @@ class ReservaTest {
 		
 		reserva.elegirTraslado(traslado1);
 		
-		assertThrows(TrasladoNoDisponibleExcepion.class, () -> reserva.elegirTraslado(traslado2));
+		assertThrows(TrasladoNoDisponibleExcepcion.class, () -> reserva.elegirTraslado(traslado2));
 		assertEquals(traslado1, reserva.getTraslado());
 		
 	}
 	@Test
-	void elCostoTotalIncluyeServiciosYTraslados() throws TrasladoNoDisponibleExcepion {
+	void elCostoTotalIncluyeServiciosYTraslados() throws TrasladoNoDisponibleExcepcion {
 		ItemCatalogo servicio = mock(ItemCatalogo.class);
 		MetodoTraslado traslado = mock(MetodoTraslado.class);
 		
