@@ -12,7 +12,7 @@ import reserva.Direccion;
 import reserva.Reserva;
 import traslados.MetodoTraslado;
 import traslados.Recepcion;
-import traslados.TrasladoNoDisponibleExcepion;
+import traslados.TrasladoNoDisponibleExcepcion;
 import traslados.TrasladoVIP;
 
 public class GeneradorVoucherTest {

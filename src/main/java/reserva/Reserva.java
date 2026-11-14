@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import notificador.ObservadorReserva;
 import java.util.List;
 import traslados.MetodoTraslado;
-import traslados.TrasladoNoDisponibleExcepion;
+import traslados.TrasladoNoDisponibleExcepcion;
 import catalogo.ItemCatalogo;///
 import metodosDePago.ProcesadorPago;
 import reserva.estado.EstadoBase;///
@@ -42,9 +42,9 @@ public class Reserva {
 	public Direccion getDireccion() {
 		return this.destino;
 	}
-	public void elegirTraslado(MetodoTraslado unTraslado) throws TrasladoNoDisponibleExcepion {
+	public void elegirTraslado(MetodoTraslado unTraslado) throws TrasladoNoDisponibleExcepcion {
 		if (!unTraslado.estaDisponible()) {
-			throw new TrasladoNoDisponibleExcepion();
+			throw new TrasladoNoDisponibleExcepcion();
 			}
 		this.metodoTraslado = unTraslado;
 	}

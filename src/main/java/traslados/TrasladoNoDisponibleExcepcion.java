@@ -1,13 +1,13 @@
 package traslados;
 
-public class TrasladoNoDisponibleExcepion extends RuntimeException {
+public class TrasladoNoDisponibleExcepcion extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public TrasladoNoDisponibleExcepion() {
+	public TrasladoNoDisponibleExcepcion() {
         super("El traslado elegido no está disponible.");
     }
 
