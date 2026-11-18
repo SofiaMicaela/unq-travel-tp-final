@@ -50,4 +50,26 @@ public class ExportadorHTML implements VisitanteReporte {
 
         return html + "</table>\n</body></html>";
     }
+    @Override
+    public String visitar(ReporteOcupacion reporte) {
+        String html = "<!DOCTYPE html>\n"
+            + "<html><head><meta charset=\"UTF-8\">"
+            + "<title>Ocupación y cupo disponible</title>"
+            + "</head><body>\n"
+            + "<h1>Ocupación y cupo disponible</h1>\n"
+            + "<table>\n"
+            + "<tr><th>Categoría</th><th>Cupos totales</th>"
+            + "<th>Cupos reservados</th><th>Cupos libres</th></tr>\n";
+
+        for (FilaOcupacion fila : reporte.getFilas()) {
+            html += "<tr>"
+                + "<td>" + fila.getCategoria().name() + "</td>"
+                + "<td>" + fila.getCuposTotales() + "</td>"
+                + "<td>" + fila.getCuposReservados() + "</td>"
+                + "<td>" + fila.getCuposLibres() + "</td>"
+                + "</tr>\n";
+        }
+
+        return html + "</table>\n</body></html>";
+    }
 }

@@ -28,4 +28,18 @@ public class ExportadorTextoPlano implements VisitanteReporte {
 
         return texto;
     }
+    @Override
+    public String visitar(ReporteOcupacion reporte) {
+        String texto = "Ocupación y cupo disponible\n";
+
+        for (FilaOcupacion fila : reporte.getFilas()) {
+            texto += fila.getCategoria()
+                + " | Totales: " + fila.getCuposTotales()
+                + " | Reservados: " + fila.getCuposReservados()
+                + " | Libres: " + fila.getCuposLibres()
+                + "\n";
+        }
+
+        return texto;
+    }
 }
