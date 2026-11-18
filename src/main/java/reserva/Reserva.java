@@ -90,6 +90,10 @@ public class Reserva {
 		notificar(estadoAntiguo, estado);
     }
 	
+	public EstadoBase getEstado() {
+		return this.estado;
+	}
+	
 	public List<ItemCatalogo> getServiciosAux() {/////
         return this.servicios;
     }

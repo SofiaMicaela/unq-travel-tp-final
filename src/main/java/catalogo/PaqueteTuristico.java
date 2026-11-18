@@ -9,7 +9,7 @@ public class PaqueteTuristico implements ItemCatalogo{
     private double descuentoPorcentaje;
     private List<ItemCatalogo> items = new ArrayList<>();
 
-    public PaqueteTuristico(String nombre, double descuentoPorcentaje) {
+    public PaqueteTuristico(String nombre, String descripcion, double descuentoPorcentaje) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.descuentoPorcentaje = descuentoPorcentaje;
