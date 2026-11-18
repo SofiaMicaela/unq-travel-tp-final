@@ -15,4 +15,17 @@ public class ExportadorTextoPlano implements VisitanteReporte {
 
         return texto;
     }
+    @Override
+    public String visitar(ReporteExposicionOperador reporte) {
+        String texto = "Exposición por operador\n";
+
+        for (FilaExposicionOperador fila : reporte.getFilas()) {
+            texto += fila.getOperador()
+                + " | Cantidad de servicios: " + fila.getCantidadServicios()
+                + " | Porcentaje del catálogo: " + fila.getPorcentajeCatalogo() + "%"
+                + "\n";
+        }
+
+        return texto;
+    }
 }
