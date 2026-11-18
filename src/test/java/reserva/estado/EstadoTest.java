@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import catalogo.ItemCatalogo;
+import metodosDePago.ProcesadorPago;
 import reserva.Reserva;
 
 public class EstadoTest {
@@ -34,12 +35,15 @@ public class EstadoTest {
 
     @Test
     void testSolicitudPendientePermiteConfirmarYCambiaEstado() {
-        SolicitudPendiente estado = new SolicitudPendiente();
+    	SolicitudPendiente estado = new SolicitudPendiente();
+        ProcesadorPago mockProcesador = mock(ProcesadorPago.class);
 
-        estado.confirmar(mockReserva);
+        estado.procesarPago(mockReserva, mockProcesador);
 
-        verify(mockReserva).procesarPago(); 
-        verify(mockReserva).setEstado(any(Confirmada.class));
+        verify(mockProcesador).procesarPago(mockReserva);
+        verify(mockReserva).registrarVenta();
+        verify(mockReserva).setEstado(any(Confirmada.class)); 
+     
     }
 
     @Test
@@ -56,7 +60,8 @@ public class EstadoTest {
     void testConfirmadaPermiteIniciarCheckInYCambiaEstado() {
         Confirmada estado = new Confirmada();
 
-        estado.iniciarCheckIn(mockReserva);
+        estado
+        .iniciarCheckIn(mockReserva);
 
         verify(mockReserva).setEstado(any(EnCheckIn.class));
     }
