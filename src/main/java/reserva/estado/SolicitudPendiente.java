@@ -18,7 +18,6 @@ public class SolicitudPendiente extends EstadoBase {
     @Override
     public void confirmar(Reserva reserva) {
     	reserva.procesarPago();
-    	reserva.setEstado(new Confirmada());
     }
 
     @Override
@@ -36,6 +35,7 @@ public class SolicitudPendiente extends EstadoBase {
 			throw new IllegalStateException( "Todavia no se eligio un metodo de pago");
 		}
     	procesador.procesarPago(reserva);
+    	reserva.registrarVenta();
     	reserva.setEstado(new Confirmada());
 	
 
