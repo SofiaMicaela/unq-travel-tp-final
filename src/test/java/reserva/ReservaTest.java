@@ -154,5 +154,16 @@ class ReservaTest {
 
 	    verify(procesador, times(1)).procesarPago(reserva);
 	}
+	@Test
+	void permiteQuitarUnServicio() {
+	    Reserva reserva = new Reserva(2, mock(Direccion.class));
+	    ItemCatalogo servicio = mock(ItemCatalogo.class);
+
+	    reserva.agregarServicio(servicio);
+	    reserva.quitarServicio(servicio);
+
+	    assertTrue(reserva.getServiciosAux().isEmpty());
+	}
+	
 	
 }
