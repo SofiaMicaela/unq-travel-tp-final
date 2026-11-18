@@ -7,6 +7,11 @@ public class EnCurso extends EstadoBase {
     public void finalizar(Reserva reserva) {
         reserva.setEstado(new Finalizada());
     }
+	
+	@Override
+	public String nombre() {
+		return "En curso";
+	}
 
     @Override
     public void cancelar(Reserva reserva) {

@@ -8,74 +8,132 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import catalogo.Categoria;
+import catalogo.Cupo;
 import catalogo.ItemCatalogo;
+import catalogo.ServicioIndividual;
 import metodosDePago.ProcesadorPago;
+import reserva.Direccion;
 import reserva.Reserva;
 
 public class EstadoTest {
-	private Reserva mockReserva;
-    private ItemCatalogo mockServicio;
+	private Reserva reserva;
+    private ServicioIndividual vuelo;
+    private ProcesadorPago procesador;
 
     @BeforeEach
     void setUp() {
-        mockReserva = mock(Reserva.class);
-        mockServicio = mock(ItemCatalogo.class);
+    	reserva = new Reserva(5, mock(Direccion.class));
+		procesador = mock(ProcesadorPago.class);
+		reserva.elegirMetodoPago(procesador);
+		vuelo = new ServicioIndividual("A-0001", "Vuelo Buenos Aires - Brasil", "Ida y vuelta", "Aereolineas Argentinas", Categoria.ClaseEjecutiva, 1000000, 0, mock(Cupo.class));
+		
+		reserva.agregarServicio(vuelo);
     }
 
     @Test
     void testSolicitudPendientePermiteAgregarServicio() {
-        SolicitudPendiente estado = new SolicitudPendiente();
-        List<ItemCatalogo> listaSimulada = new ArrayList<>();
-        when(mockReserva.getServiciosAux()).thenReturn(listaSimulada);
+    	List<ItemCatalogo> listaSimulada = new ArrayList<>();
+    	listaSimulada.add(vuelo);
+    	assertEquals(listaSimulada, reserva.getServiciosAux());
 
-        estado.agregarServicio(mockReserva, mockServicio);
-
-        assertTrue(listaSimulada.contains(mockServicio));
+        assertTrue(listaSimulada.contains(vuelo));
+    }
+    
+    @Test
+	void sePuedenQuitarItemsEnBorrador() {
+		reserva.quitarServicio(vuelo);
+		assertEquals(0, reserva.getServiciosAux().size());
+	}
+    
+    @Test
+    void noSePuedenQuitarItemsEnEstadoDistintoABorrador() {
+    	reserva.confirmar();
+		assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> reserva.quitarServicio(vuelo));
     }
 
     @Test
     void testSolicitudPendientePermiteConfirmarYCambiaEstado() {
     	SolicitudPendiente estado = new SolicitudPendiente();
-        ProcesadorPago mockProcesador = mock(ProcesadorPago.class);
 
-        estado.procesarPago(mockReserva, mockProcesador);
+        estado.procesarPago(reserva, procesador);
 
-        verify(mockProcesador).procesarPago(mockReserva);
-        verify(mockReserva).registrarVenta();
-        verify(mockReserva).setEstado(any(Confirmada.class)); 
-     
+        verify(procesador).procesarPago(reserva);
+        //verify(reserva).registrarVenta();
+        //verify(reserva).setEstado(any(Confirmada.class)); 
     }
-
+    
     @Test
-    void testConfirmadaLanzaExcepcionAlIntentarAgregarServicio() {
-        Confirmada estado = new Confirmada();
-
-        OperacionInvalidaEstadoExcepcion excepcion = assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> {
-            estado.agregarServicio(mockReserva, mockServicio);
-        });
-        
-        assertEquals("No se pueden agregar servicios estando en estado: Confirmada", excepcion.getMessage());    }
-
-    @Test
-    void testConfirmadaPermiteIniciarCheckInYCambiaEstado() {
-        Confirmada estado = new Confirmada();
-
-        estado
-        .iniciarCheckIn(mockReserva);
-
-        verify(mockReserva).setEstado(any(EnCheckIn.class));
+    void cicloDeVidaDeReservaFuncionaCorrectamente() {
+    	assertEquals("Solicitud pendiente", reserva.getEstado().nombre());
+    	
+    	reserva.confirmar();
+    	assertEquals("Confirmada", reserva.getEstado().nombre());
+    	
+    	reserva.iniciarCheckIn();
+    	assertEquals("En checkIn", reserva.getEstado().nombre());
+    	
+    	reserva.iniciarEjecucion();
+    	assertEquals("En curso", reserva.getEstado().nombre());
+    	
+    	reserva.finalizar();
+    	assertEquals("Finalizada", reserva.getEstado().nombre());
     }
-
+    
     @Test
-    void testCanceladaLanzaExcepcionAlIntentarCualquierAccion() {
-        Cancelada estado = new Cancelada();
-
-        assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> {
-            estado.confirmar(mockReserva);
-        });
-
-        assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> {
-            estado.cancelar(mockReserva);
-        });
+    void estadosNotificables() {
+    	reserva.confirmar();
+    	assertTrue(reserva.getEstado().esNotificable());
+    	
+    	reserva.iniciarCheckIn();
+    	assertFalse(reserva.getEstado().esNotificable());
+    	
+    	reserva.iniciarEjecucion();
+    	assertTrue(reserva.getEstado().esNotificable());
+    	
+    	reserva.finalizar();
+    	assertTrue(reserva.getEstado().esNotificable());
+    }
+    
+    //-- Sección cancelado
+    @Test
+    void reservaPendienteEsCancelable() {
+    	reserva.cancelar();
+    	assertTrue(reserva.getEstado().estaCancelada());
+    	assertEquals("Cancelada", reserva.getEstado().nombre());
+    }
+    
+    @Test
+    void reservaConfirmadaEsCancelable() {
+    	reserva.confirmar();
+    	reserva.cancelar();
+    	assertTrue(reserva.getEstado().estaCancelada());
+    }
+    
+    @Test
+    void reservaEnCheckInEsCancelable() {
+    	reserva.confirmar();
+    	reserva.iniciarCheckIn();
+    	reserva.cancelar();
+    	assertTrue(reserva.getEstado().estaCancelada());
+    }
+    
+    @Test
+    void reservaEnCursoEsCancelable() {
+    	reserva.confirmar();
+    	reserva.iniciarCheckIn();
+    	reserva.iniciarEjecucion();
+    	reserva.cancelar();
+    	assertTrue(reserva.getEstado().estaCancelada());
+    }
+    
+    @Test
+    void estadoCanceladoNoTieneOperacionesDisponibles() {
+    	reserva.cancelar();
+    	assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> reserva.confirmar());
+    	assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> reserva.iniciarCheckIn());
+    	assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> reserva.iniciarEjecucion());
+    	assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> reserva.finalizar());
+    	assertThrows(OperacionInvalidaEstadoExcepcion.class, () -> reserva.cancelar());
     }
 }

@@ -7,6 +7,11 @@ public class Confirmada extends EstadoBase{
     public void iniciarCheckIn(Reserva reserva) {
         reserva.setEstado(new EnCheckIn());
     }
+	
+	@Override
+	public String nombre() {
+		return "Confirmada";
+	}
 
     @Override
     public void cancelar(Reserva reserva) {

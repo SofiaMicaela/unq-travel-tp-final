@@ -13,7 +13,7 @@ public class PaqueteTuristicoTest {
 
     @BeforeEach
     void setUp() {
-        paquete = new PaqueteTuristico("Paquete Cancun", 20.0);
+        paquete = new PaqueteTuristico("Paquete Cancun", "Hotel incluido", 20.0);
         
         mockItem1 = mock(ItemCatalogo.class);
         mockItem2 = mock(ItemCatalogo.class);
@@ -26,6 +26,10 @@ public class PaqueteTuristicoTest {
 
         paquete.agregarItem(mockItem1);
         paquete.agregarItem(mockItem2);
+        
+        assertEquals("Paquete Cancun", paquete.getNombre());
+        
+        assertEquals("Hotel incluido", paquete.getDescripcion());
 
         assertEquals(1000.0, paquete.getPrecioBase(), 0.01);
 
