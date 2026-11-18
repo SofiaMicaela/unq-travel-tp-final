@@ -19,4 +19,18 @@ public class ExportadorCSv implements VisitanteReporte {
     private String escapar(String texto) {
         return "\"" + texto.replace("\"", "\"\"") + "\"";
     }
+    @Override
+    public String visitar(ReporteExposicionOperador reporte) {
+        String csv = "Operador,Cantidad de servicios,Porcentaje del catalogo\r\n";
+
+        for (FilaExposicionOperador fila : reporte.getFilas()) {
+            csv += escapar(fila.getOperador())
+                + "," + fila.getCantidadServicios()
+                + "," + fila.getPorcentajeCatalogo()
+                + "\r\n";
+        }
+
+        return csv;
+    }
+    
 }
