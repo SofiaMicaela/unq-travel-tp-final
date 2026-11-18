@@ -1,7 +1,6 @@
 package catalogo;
 import catalogo.atributos.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +12,16 @@ public class ServicioIndividual implements ItemCatalogo{
     private String operador;
     private double precioBase;
     private double descuentoPromocional;
+<<<<<<< Updated upstream
     private Map<DefinicionAtributo, Object> atributosDinamicos = new HashMap<>();
+=======
+    private Map<String, Atributo> atributos = new HashMap<>();
+    private Cupo cupo;
+>>>>>>> Stashed changes
     
     public ServicioIndividual(String codigo, String nombre, String descripcion, 
             								String operador, Categoria categoria, 
-            						double precioBase, double descuentoPromocional) {
+            						double precioBase, double descuentoPromocional, Cupo cupo) {
     		this.codigo = codigo;
     		this.nombre = nombre;
     		this.descripcion = descripcion;
@@ -25,6 +29,7 @@ public class ServicioIndividual implements ItemCatalogo{
     		this.categoria = categoria;
     		this.precioBase = precioBase;
     		this.descuentoPromocional = descuentoPromocional;
+    		this.cupo = cupo;
 }
     @Override
 	public String getNombre() {
@@ -45,6 +50,10 @@ public class ServicioIndividual implements ItemCatalogo{
 	@Override
 	public boolean esCategoria(Categoria categoria) {
 		return this.categoria == categoria;
+	}
+	@Override
+	public boolean tieneCuposDisponibles() {
+		return cupo.hayDisponibles();
 	}
 
 	
@@ -76,5 +85,9 @@ public class ServicioIndividual implements ItemCatalogo{
 	}
 	public Map<DefinicionAtributo, Object> getAtributosDinamicos() {
 		return atributosDinamicos;
+	}
+	
+	public void reservarCupo() {
+	    cupo.reservar();
 	}
 }

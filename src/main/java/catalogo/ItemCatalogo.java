@@ -8,4 +8,5 @@ public interface ItemCatalogo {
     double getPrecioBase();
     double getPrecioFinal();
 	boolean esCategoria(Categoria categoria);
+	boolean tieneCuposDisponibles();
 }
