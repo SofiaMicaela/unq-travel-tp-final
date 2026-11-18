@@ -51,6 +51,16 @@ public class PaqueteTuristico implements ItemCatalogo{
     	}
     	return false;
     }
+    
+    @Override
+	public boolean tieneCuposDisponibles() {
+		for (ItemCatalogo item : items) {
+			if(item.tieneCuposDisponibles()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public double getDescuentoPorcentaje() {
 		return descuentoPorcentaje;

@@ -2,6 +2,7 @@ package busqueda;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import catalogo.Categoria;
+import catalogo.Cupo;
 import catalogo.ItemCatalogo;
 import catalogo.ServicioIndividual;
 
@@ -27,7 +29,7 @@ public class BusquedaCatalogoTest {
 	
 	@BeforeEach
 	public void setUp() {
-		vueloBrasil = new ServicioIndividual("A-0001", "Vuelo Buenos Aires - Brasil", "Ida y vuelta", "Aereolineas Argentinas", Categoria.ClaseEjecutiva, 1000000, 0);
+		vueloBrasil = new ServicioIndividual("A-0001", "Vuelo Buenos Aires - Brasil", "Ida y vuelta", "Aereolineas Argentinas", Categoria.ClaseEjecutiva, 1000000, 0, mock(Cupo.class));
 		listaItems = new ArrayList<ItemCatalogo>();
 		listaCriteriosTrue = new ArrayList<CriterioBusqueda>();
 		listaCriteriosMix = new ArrayList<CriterioBusqueda>();
