@@ -1,5 +1,6 @@
 package reserva;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import notificador.ObservadorReserva;
 import java.util.List;
@@ -19,6 +20,8 @@ public class Reserva {
 	private ProcesadorPago procesadorPago;
 	private EstadoBase estado;///
     private List<ItemCatalogo> servicios;///
+    private LocalDate fechaConfirmacion;
+    private List<DetalleVenta> detallesVenta = new ArrayList<>();
 
 	public Reserva(int cantPasajeros, Direccion destino) {
 		this.cantidadPasajeros = cantPasajeros;
@@ -124,5 +127,24 @@ public class Reserva {
 	public void procesarPago() {
 		this.estado.procesarPago(this, this.procesadorPago);
 	}
-    
+    // visitor 
+	public void registrarVenta() {
+
+	    List<DetalleVenta> detalles = new ArrayList<>();
+
+	    for (ItemCatalogo item : this.servicios) {
+	        detalles.add(new DetalleVenta(item, item.getPrecioFinal()));
+	    }
+
+	    this.detallesVenta = detalles;
+	    this.fechaConfirmacion = LocalDate.now();
+	}
+
+	public LocalDate getFechaConfirmacion() {
+	    return this.fechaConfirmacion;
+	}
+
+	public List<DetalleVenta> getDetallesVenta() {
+	    return List.copyOf(this.detallesVenta);
+	}
 }
