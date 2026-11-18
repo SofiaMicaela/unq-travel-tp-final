@@ -5,4 +5,6 @@ public interface VisitanteReporte {
     String visitar(ReporteMasReservados reporte);
 
 	String visitar(ReporteExposicionOperador reporteExposicionOperador);
+
+	String visitar(ReporteOcupacion reporteOcupacion);
 }

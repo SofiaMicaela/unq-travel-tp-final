@@ -92,4 +92,8 @@ public class ServicioIndividual implements ItemCatalogo{
 	public void reservarCupo() {
 	    cupo.reservar();
 	}
+	
+	public int getCupoTotal() {
+	    return this.cupo.getCapacidadTotal();
+	}
 }

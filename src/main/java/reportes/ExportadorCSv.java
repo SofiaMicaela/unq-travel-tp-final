@@ -33,4 +33,19 @@ public class ExportadorCSv implements VisitanteReporte {
         return csv;
     }
     
+    @Override
+    public String visitar(ReporteOcupacion reporte) {
+        String csv = "Categoria,Cupos totales,Cupos reservados,Cupos libres\r\n";
+
+        for (FilaOcupacion fila : reporte.getFilas()) {
+            csv += fila.getCategoria().name()
+                + "," + fila.getCuposTotales()
+                + "," + fila.getCuposReservados()
+                + "," + fila.getCuposLibres()
+                + "\r\n";
+        }
+
+        return csv;
+    }
+    
 }
